@@ -1,0 +1,58 @@
+---
+- hosts: all
+  connection: local
+  become: yes
+
+  roles:
+    - geerlingguy.ruby
+
+  vars:
+      ruby_version: 2.5.1
+      ruby_download_url: https://cache.ruby-lang.org/pub/ruby/2.5/ruby-2.5.1.tar.gz
+      ruby_install_from_sourcE: true
+
+      yum_packages:
+        - epel-release
+        - sqlite-devel
+        - git
+        - curl
+        - vim
+        - nano
+        - jq
+        - yajl
+        - readline-devel
+
+  tasks:
+    - name: Install packages
+      package:
+        name: "{{ yum_packages }}"
+        state: latest
+
+    - name: Install rake and rspec gems
+      shell: gem install rake rspec
+      become_user: vagrant
+
+    - name: Checkout marc-to-argot
+      git:
+        repo: https://github.com/trln/marc-to-argot
+        dest: /home/vagrant/marc-to-argot
+      become_user: vagrant
+
+    - name: Install marc_to_argot
+      shell: rake install
+      args:
+        chdir: /home/vagrant/marc-to-argot
+        creates: /home/vagrant/marc-to-argot
+      become_user: vagrant
+
+    - name: Checkout argot-ruby
+      git:
+        repo: https://github.com/trln/argot-ruby
+        dest: /home/vagrant/argot-ruby
+      become_user: vagrant
+
+    - name: Install argot-ruby
+      shell: rake install
+      args:
+        chdir: /home/vagrant/argot-ruby
+      become_user: vagrant
