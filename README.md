@@ -16,4 +16,11 @@ argot-ruby gem should be installed, along with their command line utilities
 information:
 
   * https://github.com/trln/marc-to-argot
-  * https://github.xom/trln/argot
+  * https://github.com/trln/argot
+
+The directory on the host machine (the one from which you run vagrant) is mounted at `/vagrant` on the VM.  So you should be able to copy MARCXML files on your host machine into this directory and process them using the `mta` tool via something like:
+
+
+    $ mta create ncsu /vagrant/some-marcxml.xml argot-test.json
+
+And so forth.
