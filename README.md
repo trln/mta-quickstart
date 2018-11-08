@@ -4,10 +4,10 @@ This defines a Centos-based vagrant box for working with marc-to-argot
 
 ## Usage
 
-Install virtualbox.  Install vagrant.
-
+Install virtualbox.  Install vagrant.  Install the vagrant `vbguest` plugin, via
+    
+    $ vagrant plugin install vagrant-vbguest
     $ vagrant up
-
     $ vagrant ssh
 
 You are now logged into the vagrant box.  Ruby 2.5.1, marc-to-argot, and the
