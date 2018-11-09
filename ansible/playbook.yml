@@ -9,7 +9,12 @@
   vars:
       ruby_version: 2.5.1
       ruby_download_url: https://cache.ruby-lang.org/pub/ruby/2.5/ruby-2.5.1.tar.gz
-      ruby_install_from_sourcE: true
+      ruby_install_from_source: true
+      ruby_install_gems:
+        - rake
+        - rspec
+
+      ruby_install_gems_user: vagrant
 
       yum_packages:
         - epel-release
@@ -26,14 +31,23 @@
         - http://ftp.indexdata.dk/pub/yaz/redhat/centos/7/RPMS/x86_64/yaz-5.27.0-1.indexdata.x86_64.rpm
 
   tasks:
+
+    - name: Configure GEM_HOME
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        regexp: '^export GEM_HOME'
+        line: 'export GEM_HOME=/home/vagrant/.gem'
+
+    - name: Configure PATH
+      lineinfile:
+          path: /home/vagrant/.bashrc
+          regexp: '^export PATH'
+          line: 'export PATH="${PATH}:${GEM_HOME}/bin"'
+
     - name: Install packages
       package:
         name: "{{ yum_packages }}"
         state: latest
-
-    - name: Install rake and rspec gems
-      shell: gem install rake rspec
-      become_user: vagrant
 
     - name: Checkout marc-to-argot
       git:
@@ -42,7 +56,7 @@
       become_user: vagrant
 
     - name: Install marc_to_argot
-      shell: rake install
+      shell: GEM_HOME=~/.gem rake install
       args:
         chdir: /home/vagrant/marc-to-argot
         creates: /home/vagrant/marc-to-argot
@@ -55,11 +69,22 @@
       become_user: vagrant
 
     - name: Install argot-ruby
-      shell: rake install
+      shell: GEM_HOME=~/.gem rake install
       args:
         chdir: /home/vagrant/argot-ruby
       become_user: vagrant
 
+    - name: Checkout spofford client
+      git:
+        repo: https://github.com/trln/spofford-client
+        dest: /home/vagrant/spofford-client
+      become_user: vagrant
+
+    - name: Install spofford client
+      shell: GEM_HOME=~/.gem rake install
+      args:
+        chdir: /home/vagrant/spofford-client
+      become_user: vagrant
 
     - name: Install mrcToXml script on user's PATH
       shell: cp /vagrant/mrcToXml /home/vagrant/bin
