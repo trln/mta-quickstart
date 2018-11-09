@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Converts marc-8 encoded marc21 (binary marc) to utf-8 encoded MARC XML.
+# you will need to run this over the .mrc files exported by Sirsi
+
+# input from STDIN or filename
+INPUT_FILE=${1:-/dev/stdin}
+OUTPUT_FILE=${2:-/dev/stdout}
+
+yaz-marcdump -i marc -o marcxml -f marc8 -t utf8 -l 9=97 $INPUT_FILE > $OUTPUT_FILE

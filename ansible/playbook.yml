@@ -21,6 +21,9 @@
         - jq
         - yajl
         - readline-devel
+        - libicu
+        - http://ftp.indexdata.dk/pub/yaz/redhat/centos/7/RPMS/x86_64/libyaz5-5.27.0-1.indexdata.x86_64.rpm
+        - http://ftp.indexdata.dk/pub/yaz/redhat/centos/7/RPMS/x86_64/yaz-5.27.0-1.indexdata.x86_64.rpm
 
   tasks:
     - name: Install packages
@@ -56,3 +59,8 @@
       args:
         chdir: /home/vagrant/argot-ruby
       become_user: vagrant
+
+
+    - name: Install mrcToXml script on user's PATH
+      shell: cp /vagrant/mrcToXml /home/vagrant/bin
+
