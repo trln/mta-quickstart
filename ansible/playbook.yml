@@ -59,7 +59,6 @@
       shell: GEM_HOME=~/.gem rake install
       args:
         chdir: /home/vagrant/marc-to-argot
-        creates: /home/vagrant/marc-to-argot
       become_user: vagrant
 
     - name: Checkout argot-ruby
