@@ -85,6 +85,13 @@
         chdir: /home/vagrant/spofford-client
       become_user: vagrant
 
+    - name: Ensure ~vagrant/bin exists
+      file:
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: 0755
+
     - name: Install mrcToXml script on user's PATH
       shell: cp /vagrant/mrcToXml /home/vagrant/bin
 
