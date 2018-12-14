@@ -87,6 +87,7 @@
 
     - name: Ensure ~vagrant/bin exists
       file:
+        path: /home/vagrant/bin
         state: directory
         owner: vagrant
         group: vagrant

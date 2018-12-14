@@ -1,19 +1,47 @@
 # marc-to-argot development machine
 
-This defines a Centos-based vagrant box for working with marc-to-argot
+This defines a Centos-based vagrant box for working with marc-to-argot and the spofford client.
 
 ## Usage
 
 Install virtualbox.  Install vagrant.  Install the vagrant `vbguest` plugin, via
     
     $ vagrant plugin install vagrant-vbguest
-    $ vagrant up
+
+Next, create a new, empty directory somewhere, and check this repository out
+into that directory.  While vagrant is creating the virtual machine and getting it ready, it it will check out copies
+of `marc-to-argot` and `spofford-client` from github and install them into the VM.
+
+Next, run the following commands in the directory where you checked this repository out:
+
+    $ vagrant up [--provider virtualbox] # last part if your host OS is linux
+
+At this point, the VM is created and provisioned, and ready to run `mta` and `spofford`.  The provisioning process will create `marc-to-argot` and `spofford-client` directories as siblings of the directory containing the `Vagrantfile`, and both of these are active git repositories.
+
+To log into your new VM,
+
     $ vagrant ssh
 
-You are now logged into the vagrant box.  Ruby 2.5.1, marc-to-argot, argot-ruby, and the spofford-client gems will also be installed, along with their command line utilities `mta`, `argot`, and `spofford`.
+Ruby 2.5.1, marc-to-argot, argot-ruby, and the spofford-client gems will also be installed, along with their command line utilities `mta`, `argot`, and `spofford`.
 
-See the READMEs in the following repositories for more
-information:
+See the READMEs in the following repositories for more details about running and developing.
+
+## Working with the repositories.
+
+The reason to check this repository out into a new, empty directory is to allow the Vagrant process to mount several shared folders that are synced between the VM and the host.  This allows you to use your favourite code editors and git software on the *host* that are visible from within the guest.
+
+e.g. to make changes to `marc-to-argot` using, say, Notepad or Visual Studio Code on Windows, you would edit files under `..\marc-to-argot`, and this also changes files in `/home/vagrant/marc-to-argot` in the guest.  While logged into the guest, you can install a new `mta` script that incoroporates your changes via:
+
+    $ cd /home/vagrant/marc-to-argot
+    $ rake spec
+    $ rake install
+    $ mta create ncsu /path/to/some/marc.xml
+
+Similarly for `argot` and `spofford` binaries.  See the documentation on the relevant projects for more information.
+
+You can also use your preferred Git software (GitHub Desktop, e.g. or Sublime Merge, or the command line client) from  your host to do all the git stuff.  Other than pushing changes up to GitHub, the `git` command line client installed inside the VM can also be used for git operations.
+
+More information:
 
   * https://github.com/trln/marc-to-argot
   * https://github.com/trln/argot-ruby

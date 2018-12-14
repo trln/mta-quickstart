@@ -48,6 +48,14 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder '.', '/vagrant', owner: 'vagrant', group: 'vagrant', type: 'virtualbox'
 
+  # Mount github repos we check out inside the vm to siblings of the
+  # current directory.
+  config.vm.synced_folder '../marc-to-argot', '/home/vagrant/marc-to-argot', owner: 'vagrant', group: 'vagrant', type: 'virtualbox', create: true
+
+  config.vm.synced_folder '../spofford-client', '/home/vagrant/spofford-client', owner: 'vagrant', group: 'vagrant', type: 'virtualbox', create: true
+
+  config.vm.synced_folder '../argot-ruby', '/home/vagrant/argot-ruby', owner: 'vagrant', group: 'vagrant', type: 'virtualbox', create: true
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -76,6 +84,5 @@ Vagrant.configure("2") do |config|
     ansible.compatibility_mode = '2.0'
     ansible.galaxy_role_file = 'ansible/requirements.yml'
     ansible.playbook = 'ansible/playbook.yml'
- end
-
+  end
 end
